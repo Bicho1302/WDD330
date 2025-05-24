@@ -24,5 +24,9 @@ function cartItemTemplate(item) {
 
   return newItem;
 }
+function cartItemTemplate(item) {
+  console.log("Rendering item:", item);
+  // ...existing HTML template
+}
 
 renderCartContents();
