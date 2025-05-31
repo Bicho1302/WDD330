@@ -14,15 +14,21 @@ function renderCartContents() {
 
   // Show total footer
   document.querySelector(".cart-footer").classList.remove("hide");
-  const total = cartItems.reduce((sum, item) => sum + Number(item.FinalPrice), 0);
+
+  const total = cartItems.reduce((sum, item) => {
+    const price = parseFloat(item.FinalPrice || 0);
+    return sum + (isNaN(price) ? 0 : price);
+  }, 0);
+
   document.getElementById("cartTotal").textContent = `$${total.toFixed(2)}`;
 }
 
 function cartItemTemplate(item) {
+  const imagePath = item.Image.startsWith("..") ? item.Image.replace("../", "/") : item.Image;
   return `
     <li class="cart-card divider">
       <a href="#" class="cart-card__image">
-        <img src="${item.Image}" alt="${item.Name}" />
+        <img src="${imagePath}" alt="${item.Name}" />
       </a>
       <a href="#">
         <h2 class="card__name">${item.Name}</h2>
@@ -34,7 +40,8 @@ function cartItemTemplate(item) {
   `;
 }
 
-// Clear Cart button
+
+
 document.getElementById("clearCart")?.addEventListener("click", () => {
   localStorage.removeItem("so-cart");
   location.reload();
