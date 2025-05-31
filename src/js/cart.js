@@ -2,8 +2,18 @@ import { getLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
+
+  if (!cartItems || cartItems.length === 0) return;
+
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
+
+  // Show the footer
+  document.querySelector(".cart-footer").classList.remove("hide");
+
+  // Calculate total
+  const total = cartItems.reduce((sum, item) => sum + Number(item.FinalPrice), 0);
+  document.getElementById("cartTotal").textContent = total.toFixed(2);
 }
 
 function cartItemTemplate(item) {
@@ -21,7 +31,12 @@ function cartItemTemplate(item) {
   <p class="cart-card__quantity">qty: 1</p>
   <p class="cart-card__price">$${item.FinalPrice}</p>
 </li>`;
-
+ if (cartItems.length > 0) {
+    const total = cartItems.reduce((sum, item) => sum + Number(item.FinalPrice), 0).toFixed(2);
+    const footer = document.querySelector(".cart-footer");
+    footer.classList.remove("hide");
+    footer.querySelector(".cart-total").textContent = `Total: $${total}`;
+  }
   return newItem;
 }
 

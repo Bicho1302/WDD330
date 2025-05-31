@@ -3,18 +3,18 @@ import ProductData from "./ProductData.mjs";
 
 const dataSource = new ProductData("tents");
 
-function addProductToCart(product) {
-  let cart = JSON.parse(localStorage.getItem("so-cart"));
 
   // ensure cart is always an array
-  if (!Array.isArray(cart)) {
-    cart = [];
-  }
+  function addProductToCart(product) {
+  // Get current cart from LS (or start with empty array)
+  let cart = JSON.parse(localStorage.getItem("so-cart")) || [];
 
+  // Add the new product to the cart
   cart.push(product);
+
+  // Save updated cart back to localStorage
   localStorage.setItem("so-cart", JSON.stringify(cart));
 }
-
 // add to cart button event handler
 async function addToCartHandler(e) {
   const product = await dataSource.findProductById(e.target.dataset.id);
