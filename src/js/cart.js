@@ -9,7 +9,7 @@ function renderCartContents() {
     return;
   }
 
-  const htmlItems = cartItems.map(item => cartItemTemplate(item));
+  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   productList.innerHTML = htmlItems.join("");
 
   // Show total footer
@@ -24,7 +24,9 @@ function renderCartContents() {
 }
 
 function cartItemTemplate(item) {
-  const imagePath = item.Image.startsWith("..") ? item.Image.replace("../", "/") : item.Image;
+  const imagePath = item.Image.startsWith("..")
+    ? item.Image.replace("../", "/")
+    : item.Image;
   return `
     <li class="cart-card divider">
       <a href="#" class="cart-card__image">
@@ -33,14 +35,12 @@ function cartItemTemplate(item) {
       <a href="#">
         <h2 class="card__name">${item.Name}</h2>
       </a>
-      <p class="cart-card__color">${item.Colors[0]?.ColorName || 'N/A'}</p>
+      <p class="cart-card__color">${item.Colors[0]?.ColorName || "N/A"}</p>
       <p class="cart-card__quantity">qty: 1</p>
       <p class="cart-card__price">$${item.FinalPrice}</p>
     </li>
   `;
 }
-
-
 
 document.getElementById("clearCart")?.addEventListener("click", () => {
   localStorage.removeItem("so-cart");
