@@ -5,18 +5,27 @@ const dataSource = new ProductData("tents");
 
 // ensure cart is always an array
 function addProductToCart(product) {
-  // Get current cart from localStorage or start with empty array
-  let cart = getLocalStorage("so-cart") || [];
+  let cart = JSON.parse(localStorage.getItem("so-cart")) || [];
 
-  // Ensure FinalPrice is a number
-  product.FinalPrice = parseFloat(product.FinalPrice || product.ListPrice || 0);
+  // Ensure price is a number
+  const price = parseFloat(product.FinalPrice || product.ListPrice || 0);
 
-  // Add product to cart
-  cart.push(product);
+  // Check if the product is already in the cart
+  const existingItem = cart.find(item => item.Id === product.Id);
 
-  // Save updated cart to localStorage
-  setLocalStorage("so-cart", cart);
+  if (existingItem) {
+    // If it exists, increment the quantity
+    existingItem.quantity = (existingItem.quantity || 1) + 1;
+  } else {
+    // If it's new, add it with quantity 1
+    product.quantity = 1;
+    product.FinalPrice = price; // store parsed price
+    cart.push(product);
+  }
+
+  localStorage.setItem("so-cart", JSON.stringify(cart));
 }
+
 
 // Add to cart button event handler
 async function addToCartHandler(e) {
